@@ -16,10 +16,17 @@ app = FastAPI(
     version="1.0.0",
 )
 
-models_path = os.path.join(os.path.dirname(__file__), "..", "models")
-model = joblib.load(os.path.join(models_path, "churn_model.pkl"))
-preprocessor = DataPreprocessor()
-preprocessor.load_preprocessors(models_path)
+model = None
+preprocessor = None
+
+def get_model():
+    global model, preprocessor
+    if model is None:
+        models_path = os.path.join(os.path.dirname(__file__), "..", "models")
+        model = joblib.load(os.path.join(models_path, "churn_model.pkl"))
+        preprocessor = DataPreprocessor()
+        preprocessor.load_preprocessors(models_path)
+    return model, preprocessor
 
 
 class CustomerData(BaseModel):
@@ -76,6 +83,7 @@ def health_check() -> dict[str, str]:
 def predict_churn(customer: CustomerData) -> PredictionResponse:
     """Predict customer churn."""
     try:
+        model, preprocessor = get_model()
         data: dict[str, Any] = customer.model_dump()
         
         X = preprocessor.transform_input(data)
