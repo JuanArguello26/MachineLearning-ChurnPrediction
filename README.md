@@ -1,5 +1,9 @@
 # Churn Prediction API
 
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-yellow.svg)
+![CI](https://github.com/yourusername/churn-prediction/actions/workflows/ci.yml/badge.svg)
+
 API REST para predecir la cancelación de clientes (churn) utilizando Machine Learning.
 
 ## Descripción del Proyecto
@@ -19,17 +23,31 @@ Este proyecto implementa un modelo de clasificación para predecir qué clientes
 ```
 churn-prediction/
 ├── api/
-│   └── main.py          # API REST
+│   └── main.py              # API REST con FastAPI
 ├── data/
-│   └── churn_data.csv   # Dataset
+│   └── churn_data.csv       # Dataset
 ├── models/
-│   └── *.pkl           # Modelos guardados
+│   ├── churn_model.pkl      # Modelo entrenado
+│   ├── scaler.pkl           # Scaler para features
+│   └── label_encoders.pkl   # Encoders para variables categóricas
 ├── notebooks/
-│   └── eda.ipynb       # Análisis exploratorio
+│   └── eda.ipynb            # Análisis exploratorio
+├── src/
+│   ├── __init__.py
+│   ├── config.py            # Configuración del modelo
+│   ├── preprocessing.py    # Preprocesamiento de datos
+│   ├── model.py            # Lógica de entrenamiento
+│   └── predict.py          # Predicciones
 ├── tests/
-│   ├── test_model.py   # Tests del modelo
-│   └── test_api.py     # Tests de la API
+│   ├── test_model.py       # Tests del modelo
+│   └── test_api.py         # Tests de la API
+├── .github/
+│   └── workflows/
+│       └── ci.yml           # GitHub Actions CI/CD
+├── .pre-commit-config.yaml  # Pre-commit hooks
+├── Dockerfile
 ├── requirements.txt
+├── pyproject.toml
 └── README.md
 ```
 
@@ -37,7 +55,7 @@ churn-prediction/
 
 ```bash
 # Clonar el repositorio
-git clone <repo-url>
+git clone https://github.com/yourusername/churn-prediction.git
 cd churn-prediction
 
 # Crear entorno virtual
@@ -52,6 +70,12 @@ pip install -r requirements.txt
 
 ## Uso Local
 
+### Entrenar modelo (opcional)
+
+```bash
+python -c "from src.model import ChurnModel; m = ChurnModel(); m.full_pipeline('data/churn_data.csv')"
+```
+
 ### Ejecutar la API
 
 ```bash
@@ -61,7 +85,7 @@ uvicorn main:app --reload
 
 La API estará disponible en: `http://localhost:8000`
 
-### Documentación Interactive
+### Documentación Interactiva
 
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
@@ -101,9 +125,14 @@ pytest tests/ -v
 
 ## Deployment
 
-### Railway
+### Docker
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app)
+```bash
+docker build -t churn-prediction .
+docker run -p 8000:8000 churn-prediction
+```
+
+### Railway
 
 1. Conectar repositorio a Railway
 2. Establecer `PYTHON_VERSION` = `3.10`
@@ -138,6 +167,21 @@ pytest tests/ -v
 | GB_consumidos | GB consumidos |
 | llamadas_soporte | Llamadas al soporte |
 | cambios_plan | Cambios de plan |
+
+## Desarrollo
+
+### Pre-commit hooks
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+### Linting
+
+```bash
+ruff check .
+```
 
 ## Licencia
 
