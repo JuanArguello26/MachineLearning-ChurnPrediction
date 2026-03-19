@@ -60,4 +60,4 @@ jobs:
         with:
           context: .
           push: false
-          tags: churn-prediction:test
+          tags: churn-prediction:latest

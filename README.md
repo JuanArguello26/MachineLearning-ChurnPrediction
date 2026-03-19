@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-yellow.svg)
-![CI](https://github.com/yourusername/churn-prediction/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/JuanArguello26/MachineLearning-ChurnPrediction/actions/workflows/ci.yml/badge.svg)
 
 API REST para predecir la cancelación de clientes (churn) utilizando Machine Learning.
 
@@ -55,7 +55,7 @@ churn-prediction/
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/yourusername/churn-prediction.git
+git clone https://github.com/JuanArguello26/MachineLearning-ChurnPrediction.git
 cd churn-prediction
 
 # Crear entorno virtual
