@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 import joblib
-import pandas as pd
 from src.preprocessing import DataPreprocessor
-from src.config import FEATURE_NAMES
 
 app = FastAPI(
     title="Churn Prediction API",
@@ -18,9 +16,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
-model = joblib.load("models/churn_model.pkl")
+models_path = os.path.join(os.path.dirname(__file__), "..", "models")
+model = joblib.load(os.path.join(models_path, "churn_model.pkl"))
 preprocessor = DataPreprocessor()
-preprocessor.load_preprocessors("models")
+preprocessor.load_preprocessors(models_path)
 
 
 class CustomerData(BaseModel):

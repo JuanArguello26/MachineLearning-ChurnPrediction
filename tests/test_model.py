@@ -4,13 +4,9 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import Generator
 
-import numpy as np
 import pandas as pd
 import pytest
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -78,7 +74,7 @@ class TestModel:
     def test_model_training(self, preprocessor: DataPreprocessor, sample_dataframe: pd.DataFrame) -> None:
         """Test model training."""
         X, y, _ = preprocessor.prepare_data(sample_dataframe)
-        X_train, X_test, y_train, _ = preprocessor.split_data(X, y)
+        X_train, X_test, y_train, y_test = preprocessor.split_data(X, y)
         X_train_scaled, X_test_scaled, _ = preprocessor.scale_features(X_train, X_test)
 
         model = ChurnModel()
@@ -86,7 +82,7 @@ class TestModel:
 
         y_pred = model.predict(X_test_scaled)
         from sklearn.metrics import accuracy_score
-        assert accuracy_score(_, y_pred) > 0.5, "Model accuracy too low"
+        assert accuracy_score(y_test, y_pred) > 0.5, "Model accuracy too low"
 
     def test_model_predictions(self, preprocessor: DataPreprocessor, sample_dataframe: pd.DataFrame) -> None:
         """Test model predictions."""

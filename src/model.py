@@ -6,13 +6,13 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
-    AccuracyScore,
-    ConfusionMatrix,
-    F1Score,
-    PrecisionScore,
-    RecallScore,
-    ROC_AUC,
-    ClassificationReport,
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+    classification_report,
 )
 from typing import Any
 
@@ -66,11 +66,11 @@ class ChurnModel:
         y_proba = self.predict_proba(X_test)[:, 1]
 
         metrics = {
-            "accuracy": AccuracyScore()(y_test, y_pred),
-            "precision": PrecisionScore()(y_test, y_pred),
-            "recall": RecallScore()(y_test, y_pred),
-            "f1_score": F1Score()(y_test, y_pred),
-            "roc_auc": ROC_AUC()(y_test, y_proba),
+            "accuracy": accuracy_score(y_test, y_pred),
+            "precision": precision_score(y_test, y_pred),
+            "recall": recall_score(y_test, y_pred),
+            "f1_score": f1_score(y_test, y_pred),
+            "roc_auc": roc_auc_score(y_test, y_proba),
         }
         return metrics
 
@@ -84,9 +84,7 @@ class ChurnModel:
             raise ValueError("Model not trained. Call train() first.")
         
         y_pred = self.model.predict(X_test)
-        return ClassificationReport()(
-            y_test, y_pred, target_names=["No Churn", "Churn"]
-        )
+        return classification_report(y_test, y_pred, target_names=["No Churn", "Churn"])
 
     def get_confusion_matrix(
         self,
@@ -98,7 +96,7 @@ class ChurnModel:
             raise ValueError("Model not trained. Call train() first.")
         
         y_pred = self.model.predict(X_test)
-        return ConfusionMatrix()(y_test, y_pred)
+        return confusion_matrix(y_test, y_pred)
 
     def get_feature_importance(self) -> pd.DataFrame:
         """Get feature importance as DataFrame."""
